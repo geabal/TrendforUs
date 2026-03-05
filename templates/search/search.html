@@ -1,10 +1,85 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>검색 결과</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>검색 결과 - TrendForUs</title>
+  <link rel="stylesheet" href="{% static 'search/search.css' %}" />
 </head>
 <body>
-<h1>검색 결과 화면</h1>
+
+  <!-- 상단 고정 메뉴바 -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="logo">TrendForUs</a>
+      <form class="search-form" action="{% url 'search:search' %}" method="get">
+        <input
+          class="search-input"
+          type="text"
+          name="q"
+          value="{{ query }}"
+          placeholder="검색어를 입력하세요"
+          autocomplete="off"
+        />
+        <button class="search-btn" type="submit" aria-label="검색">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </header>
+
+  <!-- 본문 -->
+  <main class="main-content">
+
+    {% if error %}
+      <p class="error-msg">{{ error }}</p>
+
+    {% elif query and not results %}
+      <p class="no-result">'{{ query }}'에 대한 검색 결과가 없습니다.</p>
+
+    {% elif results %}
+      <ul class="result-list">
+        {% for item in results %}
+          <li class="result-item">
+            <a class="result-link" href="{{ item.url }}" target="_blank" rel="noopener noreferrer">
+              <span class="result-title">{{ item.title }}</span>
+              <p class="result-snippet">{{ item.chunk }}</p>
+              <span class="result-date">{{ item.published_date }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <!-- 페이지네이션 -->
+      {% if total_pages > 1 %}
+        <nav class="pagination" aria-label="페이지 탐색">
+          {% for p in page_range %}
+            {% if p == current_page %}
+              <span class="page-num current">{{ p }}</span>
+            {% else %}
+              <a class="page-num" href="?q={{ query }}&page={{ p }}">{{ p }}</a>
+            {% endif %}
+          {% endfor %}
+        </nav>
+      {% endif %}
+
+    {% endif %}
+
+  </main>
+
+  <!-- 플로트 버튼: 최상단으로 이동 -->
+  <button class="float-btn" id="floatBtn" aria-label="최상단으로 이동" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+         stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
+  <script src="{% static 'search/search.js' %}"></script>
 </body>
 </html>

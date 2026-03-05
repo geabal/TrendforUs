@@ -23,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
+SEARCH_API_URL = os.environ.get('SEARCH_API_URL')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -119,4 +120,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    # base 디렉토리의 static 경로
+    BASE_DIR / 'static',
+    os.path.join(BASE_DIR, 'staticapp', 'static'),
+]
+
