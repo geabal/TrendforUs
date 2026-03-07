@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}TrendForUs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'main/main.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="page-container">
+
+<!-- 검색창 섹션 -->
+<section class="search-section">
+    <div class="search-wrapper">
+        <input
+            type="text"
+            class="search-input"
+            id="mainSearchInput"
+            placeholder="검색어를 입력하세요"
+            onkeydown="handleSearchKeydown(event)"
+        >
+        <button class="search-btn" onclick="goSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+        </button>
+    </div>
+</section>
+
+<!-- 오늘의 트렌드 섹션 -->
+<section class="trend-section">
+    <h2 class="section-title">오늘의 트렌드</h2>
+
+    {% if has_trends %}
+    <div class="trend-cards">
+        {% for trend in trends %}
+        <a href="{% url 'trend:detail' trend.keyword %}" class="trend-card">
+            <div class="trend-card-header">
+                <span class="trend-keyword">{{ trend.keyword }}</span>
+                <span class="trend-volume">언급량: {{ trend.search_volume }}</span>
+            </div>
+            <p class="trend-desc">{{ trend.description }}</p>
+
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-data">오늘의 트렌드 정보가 없습니다.</p>
+    {% endif %}
+</section>
+
+<!-- 키워드별 추천 뉴스 섹션 -->
+{% if has_trends %}
+<section class="news-section">
+    {% for item in news_by_keyword %}
+    <div class="news-keyword-block">
+        <h3 class="news-keyword-title"># {{ item.keyword }}</h3>
+
+        {% if item.news_list %}
+        <div class="news-grid">
+            {% for news in item.news_list %}
+            <a href="{{ news.url }}" target="_blank" rel="noopener noreferrer" class="news-card">
+                <p class="news-title">{{ news.title }}</p>
+                <p class="news-body">{{ news.content|truncatechars:80 }}</p>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-news">관련 뉴스가 없습니다.</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'main/main.js' %}"></script>
+{% endblock %}

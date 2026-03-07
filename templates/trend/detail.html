@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ keyword }} - TrendForUs{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'trend/trend_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+  <!-- ── 본문 ── -->
+  <main class="page-container">
+
+    <!-- 키워드 헤더 섹션 -->
+    <section class="keyword-header">
+      <a href="/search/?q={{ keyword }}" class="keyword-title">{{ keyword }}</a>
+      <div class="keyword-meta">
+        <span>집계 일자: {{ date }}</span>
+        <span>언급량: {{ search_volume }}</span>
+      </div>
+
+      <!-- 연관어 태그 -->
+      <div class="related-tags">
+        {% for tag in related %}
+          <a href="/search/?q={{ tag }}" class="related-tag">{{ tag }}</a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- AI 요약 섹션 -->
+    <section class="ai-summary">
+      <div class="ai-summary-card">
+        <h2>AI가 요약한 트렌드 소식</h2>
+        <ul>
+          {% for sentence in description %}
+            <li>{{ sentence }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 관련 뉴스 섹션 -->
+    <section class="related-news">
+      <h2>관련 뉴스</h2>
+      <div class="news-grid">
+        {% for news in news_list %}
+          <a href="{{ news.url }}" target="_blank" rel="noopener noreferrer" class="news-card">
+            <h3>{{ news.title }}</h3>
+            <p>{{ news.chunk }}</p>
+          </a>
+        {% empty %}
+          {# 뉴스 없음: 섹션 자체를 조용히 비움 — 별도 에러 메시지 없음 #}
+        {% endfor %}
+      </div>
+
+      {% if news_list %}
+        <a href="/search/?q={{ keyword }}" class="more-link">
+          '{{ keyword }}' 검색 결과 더 보기 &gt;
+        </a>
+      {% endif %}
+    </section>
+
+  </main>
+
+{% endblock %}

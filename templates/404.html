@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>페이지를 찾을 수 없습니다 - TrendForUs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2B6CB0;
+      --primary-light: #EBF4FF;
+      --text-main: #1A202C;
+      --text-sub: #4A5568;
+      --border: #E2E8F0;
+      --bg-page: #F7F8FA;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* 네비게이션 바 */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+    }
+    .navbar-logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .navbar-logo:hover { opacity: 0.85; }
+
+    /* 404 본문 */
+    .error-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+    .error-code {
+      font-size: 6rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .error-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .error-desc {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      line-height: 1.7;
+    }
+    .home-btn {
+      margin-top: 0.5rem;
+      display: inline-block;
+      padding: 0.65rem 1.75rem;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: opacity 0.15s;
+    }
+    .home-btn:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+  <!-- 네비게이션 바 -->
+  <nav class="navbar">
+    <a href="/" class="navbar-logo">TrendForUs</a>
+  </nav>
+
+  <!-- 404 본문 -->
+  <div class="error-container">
+    <div class="error-code">404</div>
+    <p class="error-title">페이지를 찾을 수 없습니다</p>
+    <p class="error-desc">
+      요청하신 페이지가 존재하지 않거나 삭제되었습니다.<br>
+      주소를 다시 확인해 주세요.
+    </p>
+    <a href="/" class="home-btn">홈으로 이동</a>
+  </div>
+
+</body>
+</html>

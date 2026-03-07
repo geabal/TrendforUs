@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}TrendForUs{% endblock %}</title>
+
+  <!-- 공통 스타일 -->
+  <link rel="stylesheet" href="{% static 'base.css' %}">
+
+  <!-- 페이지별 추가 스타일 -->
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- ── 공통 네비게이션 바 ── -->
+  <nav class="navbar">
+    <a href="/" class="navbar-logo">TrendForUs</a>
+    {% block navbar_extra %}{% endblock %}
+  </nav>
+
+  <!-- ── 페이지 본문 ── -->
+  {% block content %}{% endblock %}
+
+  <!-- ── 공통 플로트 버튼 ── -->
+  <button class="float-btn" id="floatBtn" aria-label="최상단으로 이동" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+         stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
+  <!-- 공통 스크립트 -->
+  <script src="{% static 'base.js' %}"></script>
+
+  <!-- 페이지별 추가 스크립트 -->
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>

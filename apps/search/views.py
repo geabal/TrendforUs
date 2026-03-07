@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from base.search_module import get_search_result
+from base.api_module import get_search_result
 from django.core.paginator import Paginator
 
 PAGE_SIZE = 10
@@ -38,7 +38,8 @@ def search(request):
                     start = max(1, end - 4)
 
             page_range = range(start, end + 1)
-
+        
+        # 에러 메시지 부분은 디버깅용 메시지. 배포 시 삭제 필요
         except Exception as e:
             error = f"검색 서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.\n에러 메시지: {e}"
 

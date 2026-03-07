@@ -5,6 +5,5 @@ from . import views
 app_name='main'
 
 urlpatterns = [
-    path('', views.main_index, name='selectDB'),
-
+    path('', views.index, name='index'),
 ]

@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 SEARCH_API_URL = os.environ.get('SEARCH_API_URL')
-
+TREND_API_URL = os.environ.get('TREND_API_URL')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -124,6 +124,34 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     # base 디렉토리의 static 경로
     BASE_DIR / 'static',
-    os.path.join(BASE_DIR, 'staticapp', 'static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 
