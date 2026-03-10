@@ -11,7 +11,23 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-import environ, os
+import os
+import boto3
+
+# SSM 클라이언트 생성
+ssm = boto3.client('ssm', region_name='ap-northeast-2')
+
+def get_parameter(parameter_name, isDescrypt=False):
+    try:
+        response = ssm.get_parameter(
+            Name=parameter_name,
+            WithDecryption=isDescrypt
+        )
+        return response['Parameter']['Value']
+    except Exception as e:
+        print(f"파라미터 조회 실패: {e}")
+        return None
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,15 +37,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
-SECRET_KEY = os.environ.get('SECRET_KEY')
-SEARCH_API_URL = os.environ.get('SEARCH_API_URL')
-TREND_API_URL = os.environ.get('TREND_API_URL')
+SECRET_KEY = get_parameter('/TrendforUs/prod/DjangoSecret',True)
+SEARCH_API_URL = get_parameter('/TrendforUs/prod/SEARCH_API_URL', True)
+TREND_API_URL = get_parameter('/TrendforUs/prod/TREND_API_URL',True)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1",
+                 ".ap-northeast-2.compute.amazonaws.com",
+                 "www.trendforus.site",
+                 ".trendforus.site"]
 
 
 # Application definition
@@ -121,11 +140,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    # base 디렉토리의 static 경로
-    BASE_DIR / 'static',
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 LOGGING = {
