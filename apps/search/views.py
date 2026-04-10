@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from base.api_module import get_search_result
 from django.core.paginator import Paginator
+from base.date_module import format_relative_time
 
 PAGE_SIZE = 10
 PAGE_WINDOW = 2
@@ -20,6 +21,9 @@ def search(request):
 
             all_results = data.get("result", [])
             total = len(all_results)
+            
+            for item in all_results:
+                item["relative_date"] = format_relative_time(str(item.get("published_date", "None")))
 
             paginator = Paginator(all_results, PAGE_SIZE)
             page_obj = paginator.get_page(current_page)
