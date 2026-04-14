@@ -17,7 +17,8 @@ def search(request):
 
     if user_query:
         try:
-            data = get_search_result(user_query)
+            cache_key = f"search:{user_query}:{current_page}"
+            data = get_search_result(user_query, cache_key= cache_key)
 
             all_results = data.get("result", [])
             total = len(all_results)

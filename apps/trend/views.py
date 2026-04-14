@@ -1,6 +1,7 @@
 import requests
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
+from django.conf import settings
 from .models import TrendKeyword
 from base.api_module import get_search_result
 from base.format_module import format_search_volume
@@ -8,6 +9,7 @@ def trend(request):
     return render(request, 'trend/trend.html')
 
 NEWS_MAX_COUNT = 4
+TREND_TTL = settings.CACHE_TTL['TREND']
 
 def _fetch_related_news(keyword: str) -> list:
     """
@@ -15,7 +17,8 @@ def _fetch_related_news(keyword: str) -> list:
     호출 실패 시 빈 리스트 반환.
     """
     try:
-        data = get_search_result(keyword)
+        cache_key = f"trend:{keyword}"
+        data = get_search_result(keyword, cache_key, ttl=TREND_TTL)
         return data.get("result", [])[:NEWS_MAX_COUNT]
     except Exception:
         return []

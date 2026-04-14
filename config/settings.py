@@ -169,4 +169,21 @@ LOGGING = {
     },
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",  # /1은 DB 번호 (0~15)
+        "TIMEOUT": 60*60*1,  # 기본 캐시 유지 시간 (초)
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SOCKET_CONNECT_TIMEOUT": 5,   # Redis 연결 대기 시간 (초)
+            "SOCKET_TIMEOUT": 5,           # Redis 응답 대기 시간 (초)
+            "IGNORE_EXCEPTIONS": True,     # Redis 장애 시 캐시 miss로 처리 (서비스 중단 방지)
+        }
+    }
+}
 
+CACHE_TTL = {
+    "TREND": 60 * 60 * 12,   # 12시간
+    "SEARCH": 60 * 60 * 1,   # 1시간
+}
