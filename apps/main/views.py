@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.utils import timezone
+from django.conf import settings
 
 from base.api_module import get_search_result
 from base.format_module import format_search_volume
 from apps.trend.models import TrendKeyword
 
+TREND_TTL = settings.CACHE_TTL['TREND']
 def index(request):
     today = timezone.localdate()
 
@@ -26,7 +28,8 @@ def index(request):
         # 키워드별 뉴스 검색
         news_list = []
         try:
-            result = get_search_result(trend.keyword)
+            cache_key = f"trend:{trend.keyword}"
+            result = get_search_result(trend.keyword, cache_key=cache_key, ttl=TREND_TTL)
             news_list = result.get('result', [])[:3]
         except Exception:
             news_list = []
